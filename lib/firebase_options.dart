@@ -21,10 +21,7 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       case TargetPlatform.iOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for ios - '
@@ -60,5 +57,13 @@ class DefaultFirebaseOptions {
     authDomain: 'mlm-app-vijayawada.firebaseapp.com',
     storageBucket: 'mlm-app-vijayawada.appspot.com',
     measurementId: 'G-WN439VLRSR',
+  );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyBmDvYHdwAt3hLgiqHpyHhgni3iLlOHC_k',
+    appId: '1:133678038414:android:83862021e3a84f2809b8df',
+    messagingSenderId: '133678038414',
+    projectId: 'mlm-app-vijayawada',
+    storageBucket: 'mlm-app-vijayawada.appspot.com',
   );
 }
