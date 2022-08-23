@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/firestore.dart';
+import 'package:getwidget/getwidget.dart';
 
 class FirestoreListViewBuilder extends StatelessWidget {
   final Query<Map<String, dynamic>> query;
@@ -19,13 +20,12 @@ class FirestoreListViewBuilder extends StatelessWidget {
     this.noResultsW,
     this.errorW,
     this.pageSize = 8,
-    this.shrinkWrap =false,
+    this.shrinkWrap = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FirestoreQueryBuilder<Map<String, dynamic>>(
-      
         pageSize: pageSize,
         query: query,
         builder: (context, snapshot, _) {
@@ -43,7 +43,7 @@ class FirestoreListViewBuilder extends StatelessWidget {
           }
           if (snapshot.hasData && snapshot.docs.isNotEmpty) {
             return ListView.builder(
-              shrinkWrap: shrinkWrap,
+                shrinkWrap: shrinkWrap,
                 itemCount: snapshot.docs.length,
                 itemBuilder: (context, index) {
                   if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
@@ -53,7 +53,7 @@ class FirestoreListViewBuilder extends StatelessWidget {
                   return builder(context, qds);
                 });
           }
-          return loadingW ?? const CircularProgressIndicator();
+          return loadingW ?? const GFLoader();
         });
   }
 }

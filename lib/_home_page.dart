@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/list_tile/gf_list_tile.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:myshopadmin/Screens/b_list_of_products.dart';
 import 'package:myshopadmin/Screens/prime_members.dart';
 import 'package:myshopadmin/services/firebase_objects.dart';
 
@@ -29,15 +30,22 @@ class HomePage extends StatelessWidget {
             titleText: "Prime members",
             avatar: const Icon(MdiIcons.accountGroup),
             onTap: () async {
-              Get.to(const PrmeMembersPage());
               waitMilli();
+              Get.to(() => const PrmeMembersPage());
             },
           ),
           const GFListTile(
             titleText: "Non prime Gmail members",
-            avatar: Icon(MdiIcons.accountGroup),
+            avatar: Icon(MdiIcons.account),
           ),
-          const Expanded(child: ListPrime()),
+          GFListTile(
+            titleText: "List of products",
+            avatar: const Icon(MdiIcons.formatListText),
+            onTap: () async {
+              waitMilli();
+              Get.to(() => const ListOfProducts());
+            },
+          ),
         ],
       ),
     );

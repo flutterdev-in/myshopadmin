@@ -47,7 +47,7 @@ class ListPrime extends StatelessWidget {
                 return GFListTile(
                   titleText: um.profileName,
                   subTitleText:
-                      "Direct : ${um.directIncome * 500},  Matrix : ${matrixIncome(um.memberPosition!, umLast.memberPosition!)}",
+                      "Direct : ${um.directIncome * 500}\nMatrix : ${matrixIncome(um.memberPosition!, umLast.memberPosition!)}",
                   icon: Text(
                       "r${rowNumber(um.memberPosition!) + 1}p${rowPosition(um.memberPosition!)} = ${um.memberPosition}"),
                   avatar: GFAvatar(
