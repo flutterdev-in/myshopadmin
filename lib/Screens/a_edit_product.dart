@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:myshopadmin/Screens/ab_edit_photos.dart';
+import 'package:myshopadmin/Screens/ac_edit_descriptions.dart';
 import 'package:myshopadmin/custom%20widgets/stream_builder_widget.dart';
 import 'package:myshopadmin/dart/repeatFunctions.dart';
 import 'package:myshopadmin/dart/useful_functions.dart';
@@ -155,25 +157,35 @@ class EditProductPage extends StatelessWidget {
                   Align(
                       alignment: Alignment.topRight,
                       child: TextButton(
-                          onPressed: () {}, child: const Text("Edit photos"))),
-               if (pm.images!=null)   SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                        children: pm.images!
-                            .map((e) => Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: SizedBox(
-                                      width: 80,
-                                      height: 80,
-                                      child: CachedNetworkImage(imageUrl: e)),
-                                ))
-                            .toList()),
-                  ),
+                          onPressed: () async {
+                            await waitMilli();
+                            Get.to(() => EditPhotos(pm));
+                          },
+                          child: const Text("Edit photos"))),
+                  if (pm.images != null)
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                          children: pm.images!
+                              .map((e) => Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: SizedBox(
+                                        width: 80,
+                                        height: 80,
+                                        child: CachedNetworkImage(
+                                            imageUrl: e.url)),
+                                  ))
+                              .toList()),
+                    ),
                   ExpansionTile(
                     initiallyExpanded: true,
                     title: const Text("Descriptions"),
-                    leading:
-                        TextButton(onPressed: () {}, child: const Text("Edit")),
+                    leading: TextButton(
+                        onPressed: () async {
+                          await waitMilli();
+                          Get.to(() => EditDescriptions(pm));
+                        },
+                        child: const Text("Edit")),
                     children: pm.descriptions
                             ?.map((e) => Padding(
                                   padding: const EdgeInsets.all(4.0),

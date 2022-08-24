@@ -24,19 +24,19 @@ class AuthGate extends StatelessWidget {
           return const GoogleSignInScreen();
         } else {
           // Render your application if authenticated
-          var wid = const Scaffold(body: GFLoader());
+
           return StreamDocBuilder(
               docRef: adminGmailsDR,
-              loadingW: wid,
-              errorW: wid,
-              noResultsW: wid,
+              loadingW: UnAuthorizedLogin(false),
+              errorW: UnAuthorizedLogin(false),
+              noResultsW: UnAuthorizedLogin(true),
               docBuilder: (context, snapshot) {
                 var gmails = snapshot.data()?[fa.gmails] as List;
                 if (gmails
                     .contains(fireUser().email?.replaceAll("@gmail.com", ""))) {
                   return const HomePage();
                 }
-                return const UnAuthorizedLogin();
+                return UnAuthorizedLogin(true);
               });
         }
       },
@@ -132,7 +132,8 @@ Future<void> googleLoginFunction() async {
 //
 
 class UnAuthorizedLogin extends StatelessWidget {
-  const UnAuthorizedLogin({Key? key}) : super(key: key);
+  bool isUnAuth;
+  UnAuthorizedLogin(this.isUnAuth, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -141,9 +142,11 @@ class UnAuthorizedLogin extends StatelessWidget {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text("You are not authorized, to access this website"),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(isUnAuth
+                ? "You are not authorized, to access this website"
+                : "Loading please wait...."),
           ),
           GFButton(
             onPressed: () {

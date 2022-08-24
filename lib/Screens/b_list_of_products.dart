@@ -40,7 +40,7 @@ class ListOfProducts extends StatelessWidget {
                   avatar: GFAvatar(
                     backgroundImage: pm.images?.first != null
                         ? CachedNetworkImageProvider(
-                            pm.images!.first!.toString(),
+                            pm.images!.first.url,
                           )
                         : null,
                   ),
