@@ -4,23 +4,27 @@ import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:myshopadmin/Screens/a_edit_product.dart';
+import 'package:myshopadmin/Screens/Products/a_edit_product.dart';
 
 import '../dart/const_global_objects.dart';
 import '../dart/rx_variables.dart';
 import '../services/firebase_objects.dart';
+import 'prices_model.dart';
 
 class ProductModel {
+  String? productID;
   String name;
+
   List<ImageModel>? images;
   DateTime uploadTime;
-  List categories;
-  num mrp;
-  num? price;
+  List<String> categories;
+  List<PricesModel>? listPrices;
+  num highPrice;
+  num lowPrice;
   List? descriptions;
-  int stockAvailable;
-  int maxPerOrder;
+  String? priceType;
   bool? isPublic;
+
   int? productNumber;
   Reference? productSR;
 
@@ -31,14 +35,15 @@ class ProductModel {
     required this.images,
     required this.uploadTime,
     required this.categories,
-    required this.mrp,
-    required this.price,
+    required this.highPrice,
+    required this.lowPrice,
+    required this.listPrices,
     required this.descriptions,
-    required this.maxPerOrder,
-    required this.stockAvailable,
     required this.isPublic,
-    required this.productNumber,
+    required this.productID,
     required this.productSR,
+    required this.priceType,
+    required this.productNumber,
   });
 
   Map<String, dynamic> toMap() {
@@ -46,34 +51,46 @@ class ProductModel {
       productMOS.name: name,
       productMOS.images: images?.map((e) => e.toMap()).toList(),
       productMOS.uploadTime: Timestamp.fromDate(uploadTime),
+      productMOS.lowPrice:
+          listPrices != null ? pricesMOs.minMaxPrice(listPrices!)[1] : lowPrice,
+      productMOS.highPrice: listPrices != null
+          ? pricesMOs.minMaxPrice(listPrices!)[1]
+          : highPrice,
+      productMOS.listPrices: listPrices?.map((e) => e.toMap()).toList(),
       productMOS.categories: categories,
-      productMOS.mrp: mrp,
-      productMOS.price: price,
       productMOS.descriptions: descriptions,
-      productMOS.maxPerOrder: maxPerOrder,
-      productMOS.stockAvailable: stockAvailable,
       productMOS.isPublic: isPublic,
-      productMOS.productNumber: productNumber,
-      "productSR": productSR,
+      productMOS.productID: productID,
+      productMOS.priceType: priceType,
+      productMOS.productSR: productSR,
     };
   }
 
   factory ProductModel.fromMap(Map<String, dynamic> productMap) {
-    var listImages = productMap[productMOS.images] as List;
+    var listImages = productMap[productMOS.images] as List?;
+    var listPrcs0 = productMap[productMOS.listPrices] as List?;
+    var listPrcs = listPrcs0?.map((e) => PricesModel.fromMap(e)).toList();
+    var listCat0 = productMap[productMOS.categories] as List?;
+    var listCat = listCat0?.map(((e) => e.toString())).toList();
     return ProductModel(
       name: productMap[productMOS.name] ?? "",
-      images: listImages.map((e) => ImageModel.fromMap(e)).toList(),
+      images: listImages?.map((e) => ImageModel.fromMap(e)).toList(),
+      listPrices: listPrcs,
       uploadTime: productMap[productMOS.uploadTime]?.toDate(),
-      categories: productMap[productMOS.categories],
-      mrp: productMap[productMOS.mrp],
-      price: productMap[productMOS.price],
+      lowPrice: listPrcs != null
+          ? pricesMOs.minMaxPrice(listPrcs)[0]
+          : productMap[productMOS.highPrice] ?? 0,
+      highPrice: listPrcs != null
+          ? pricesMOs.minMaxPrice(listPrcs)[1]
+          : productMap[productMOS.highPrice] ?? 0,
+      categories: listCat ?? [],
       descriptions: productMap[productMOS.descriptions],
-      maxPerOrder: productMap[productMOS.maxPerOrder],
-      stockAvailable: productMap[productMOS.stockAvailable],
       isPublic: productMap[productMOS.isPublic],
+      priceType: productMap[productMOS.priceType],
       productNumber: productMap[productMOS.productNumber],
-      productSR: productMap["productSR"] != null
-          ? storageRef.child(productMap["productSR"])
+      productID: productMap[productMOS.productID],
+      productSR: productMap[productMOS.productSR] != null
+          ? storageRef.child(productMap[productMOS.productSR])
           : null,
     );
   }
@@ -83,20 +100,27 @@ ProductModelObjects productMOS = ProductModelObjects();
 
 class ProductModelObjects {
   final name = "name";
-  final price = "price";
-  final mrp = "mrp";
+  final highPrice = "highPrice";
+  final lowPrice = "lowPrice";
   final categories = "categories";
   final images = "images";
   final descriptions = "descriptions";
   final uploadTime = "uploadTime";
-  final maxPerOrder = "maxPerOrder";
-  final stockAvailable = "stockAvailable";
+  final listPrices = "listPrices";
   final isPublic = "isPublic";
+  final productID = "productID";
   final productNumber = "productNumber";
+  final productSR = "productSR";
+  final priceType = "priceType";
   final productsCR = FirebaseFirestore.instance.collection("products");
 
-  Reference productSR(DocumentReference<Map<String, dynamic>> productDR) {
+  Reference productSRf(DocumentReference<Map<String, dynamic>> productDR) {
     return storageRef.child("products").child(productDR.id);
+  }
+
+  Future<void> updateProductDoc(ProductModel pm) async {
+    var dr = pm.docRef!;
+    await dr.set(pm.toMap(), SetOptions(merge: true));
   }
 
   Future<void> addProduct() async {
@@ -105,13 +129,14 @@ class ProductModelObjects {
         images: null,
         uploadTime: DateTime.now(),
         categories: [],
-        mrp: 0,
-        price: 0,
         descriptions: null,
-        maxPerOrder: 0,
-        stockAvailable: 0,
-        productNumber: null,
+        productID: null,
+        listPrices: null,
+        highPrice: 0,
+        lowPrice: 0,
+        priceType: null,
         productSR: null,
+        productNumber: null,
         isPublic: false);
     await productsCR
         .orderBy(productNumber, descending: true)
@@ -124,8 +149,10 @@ class ProductModelObjects {
       }
     });
 
-    await productsCR.add(pm.toMap()).then((dr) {
+    await productsCR.add(pm.toMap()).then((dr) async {
       pm.docRef = dr;
+      pm.productSR = productSRf(dr);
+      await dr.set(pm.toMap(), SetOptions(merge: true));
       Get.to(() => EditProductPage(pm));
     });
   }
@@ -144,7 +171,7 @@ class ProductModelObjects {
           quality: 85,
         ).then((compressedFile) async {
           final name = DateFormat("dd_MMM_HH_mm").format(DateTime.now());
-          final photoSR = productMOS.productSR(productDR).child("$name.jpg");
+          final photoSR = productMOS.productSRf(productDR).child("$name.jpg");
           await photoSR.putFile(compressedFile).then((ts) async {
             await ts.ref.getDownloadURL().then((url) async {
               await productDR.update({
@@ -179,13 +206,9 @@ Future<void> updateProductDoc({
     productMOS.images: images?.map((e) => e.toMap()).toList(),
     productMOS.uploadTime: uploadTime,
     productMOS.categories: categories,
-    productMOS.mrp: mrp,
-    productMOS.price: price,
     productMOS.descriptions: descriptions,
-    productMOS.maxPerOrder: maxPerOrder,
-    productMOS.stockAvailable: stockAvailable,
     productMOS.isPublic: isPublic,
-    productMOS.productNumber: productNumber,
+    productMOS.productID: productNumber,
   };
 
   Map<String, dynamic> updatedMap = {};

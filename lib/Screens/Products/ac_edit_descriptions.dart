@@ -6,8 +6,8 @@ import 'package:myshopadmin/Models/product_model.dart';
 import 'package:myshopadmin/dart/rx_variables.dart';
 import 'package:myshopadmin/dart/useful_functions.dart';
 
-import '../custom widgets/stream_builder_widget.dart';
-import '../dart/repeatFunctions.dart';
+import '../../custom widgets/stream_builder_widget.dart';
+import '../../dart/repeatFunctions.dart';
 
 class EditDescriptions extends StatelessWidget {
   final ProductModel pm;

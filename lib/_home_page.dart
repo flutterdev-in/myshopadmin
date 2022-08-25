@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/list_tile/gf_list_tile.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:myshopadmin/Screens/b_list_of_products.dart';
+import 'package:myshopadmin/Screens/Categories/_list_of_categories.dart';
+import 'package:myshopadmin/Screens/Products/_list_of_products.dart';
 import 'package:myshopadmin/Screens/prime_members.dart';
 import 'package:myshopadmin/services/firebase_objects.dart';
 
+import 'Screens/non_prime_members.dart';
 import 'dart/colors.dart';
 import 'dart/repeatFunctions.dart';
 import 'services/firebase_objects.dart';
@@ -34,9 +36,14 @@ class HomePage extends StatelessWidget {
               Get.to(() => const PrmeMembersPage());
             },
           ),
-          const GFListTile(
+          GFListTile(
             titleText: "Non prime Gmail members",
-            avatar: Icon(MdiIcons.account),
+           
+            avatar: const Icon(MdiIcons.account),
+            onTap: () async {
+              await waitMilli();
+              Get.to(() => const NonPrmeMembersPage());
+            },
           ),
           GFListTile(
             titleText: "List of products",
@@ -44,6 +51,14 @@ class HomePage extends StatelessWidget {
             onTap: () async {
               waitMilli();
               Get.to(() => const ListOfProducts());
+            },
+          ),
+          GFListTile(
+            titleText: "List of categories",
+            avatar: const Icon(MdiIcons.clipboardListOutline),
+            onTap: () async {
+              waitMilli();
+              Get.to(() => const ListOfCategories());
             },
           ),
         ],

@@ -45,7 +45,10 @@ class ListPrime extends StatelessWidget {
               docBuilder: (context, snapshot) {
                 var umLast = UserModel.fromMap(snapshot.data());
                 return GFListTile(
-                  titleText: um.profileName,
+                  title: Text(
+                    um.profileName,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   subTitleText:
                       "Direct : ${um.directIncome * 500}\nMatrix : ${matrixIncome(um.memberPosition!, umLast.memberPosition!)}",
                   icon: Text(

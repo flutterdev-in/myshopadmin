@@ -8,7 +8,7 @@ import 'package:myshopadmin/Models/product_model.dart';
 import 'package:myshopadmin/dart/repeatFunctions.dart';
 import 'package:myshopadmin/dart/rx_variables.dart';
 
-import '../custom widgets/stream_builder_widget.dart';
+import '../../custom widgets/stream_builder_widget.dart';
 
 class EditPhotos extends StatelessWidget {
   final ProductModel pm;
