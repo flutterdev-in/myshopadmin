@@ -48,16 +48,27 @@ class ListOfCategories extends StatelessWidget {
 
   Widget catW(int index, DocumentSnapshot<Map<String, dynamic>> docSnap) {
     var list = catMOs.listCatUptime(docSnap);
+    var cat = list[index];
 
     return GFListTile(
       // padding: const EdgeInsets.all(0),
-      color: Colors.brown.shade100,
-      avatar: GFAvatar(
-        backgroundImage: list[index].imageUrl != null
-            ? CachedNetworkImageProvider(list[index].imageUrl!)
-            : null,
-      ),
-      titleText: list[index].name,
+      color: Colors.brown.shade50,
+      avatar: InkWell(
+          child: Obx(() => GFAvatar(
+                backgroundImage: cat.imageUrl != null
+                    ? CachedNetworkImageProvider(cat.imageUrl!)
+                    : null,
+              )),
+          onTap: () async {
+            String? imgUrl = await catMOs.pickUploadCatImage(cat.name);
+            if (imgUrl != null) {
+              cat.imageUrl = imgUrl;
+              cat.imageSR ??= catMOs.thisCatStorageRef(cat.name);
+              list[index] = cat;
+              await catMOs.updateCatDoc(list);
+            }
+          }),
+      titleText: cat.name,
       icon: IconButton(
           onPressed: () async {
             await waitMilli();
@@ -92,12 +103,11 @@ class ListOfCategories extends StatelessWidget {
             TextButton(
                 onPressed: () async {
                   if (tc.text.isNotEmpty) {
-                    if (image.value.isNotEmpty) {
-                      await catMOs.thisCatStorageRef(tc.text).delete();
-                      image.value = "";
-                    }
                     String? imgUrl = await catMOs.pickUploadCatImage(tc.text);
                     if (imgUrl != null) {
+                      // if (image.value.isNotEmpty) {
+                      //   await catMOs.thisCatStorageRef(tc.text).delete();
+                      // }
                       image.value = imgUrl;
                     }
                   }

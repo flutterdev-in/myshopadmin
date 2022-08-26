@@ -29,8 +29,12 @@ class EditProductPage extends StatelessWidget {
           IconButton(
               onPressed: () async {
                 await waitMilli(500);
+                if (pmOld.images!=null){
+                  await pmOld.productSR?.delete();
+                }
+                
                 await pmOld.docRef!.delete();
-                await pmOld.productSR?.delete();
+
                 await waitMilli(800);
                 Get.back();
               },

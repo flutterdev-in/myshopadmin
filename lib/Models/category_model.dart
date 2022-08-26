@@ -98,10 +98,10 @@ class CategoriesModelObjects {
   Future<void> removeCat(
       DocumentSnapshot<Map<String, dynamic>> docSnap, int catIndex) async {
     var list = listCatUptime(docSnap);
+    await list[catIndex].imageSR?.delete();
     list.removeAt(catIndex);
 
-    await docSnap.reference.set({listCat: list.map((e) => e.toMap()).toList()},
-        SetOptions(merge: true));
+    await updateCatDoc(list);
   }
 
   Future<String?> pickUploadCatImage(String name) async {
@@ -128,5 +128,12 @@ class CategoriesModelObjects {
       isLoading.value = false;
     });
     return image;
+  }
+
+  //
+  Future<void> updateCatDoc(List<CategoryModel> listCats) async {
+    await categoriesDocRef().set(
+        {listCat: listCats.map((e) => e.toMap()).toList()},
+        SetOptions(merge: true));
   }
 }

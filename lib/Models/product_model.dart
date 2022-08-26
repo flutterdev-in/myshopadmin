@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
@@ -62,7 +64,7 @@ class ProductModel {
       productMOS.isPublic: isPublic,
       productMOS.productID: productID,
       productMOS.priceType: priceType,
-      productMOS.productSR: productSR,
+      productMOS.productSR: productSR?.fullPath,
     };
   }
 
@@ -153,6 +155,7 @@ class ProductModelObjects {
       pm.docRef = dr;
       pm.productSR = productSRf(dr);
       await dr.set(pm.toMap(), SetOptions(merge: true));
+     
       Get.to(() => EditProductPage(pm));
     });
   }
@@ -249,4 +252,6 @@ class ImageModel {
       );
     }
   }
+
+  
 }

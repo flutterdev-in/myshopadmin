@@ -38,7 +38,6 @@ class HomePage extends StatelessWidget {
           ),
           GFListTile(
             titleText: "Non prime Gmail members",
-           
             avatar: const Icon(MdiIcons.account),
             onTap: () async {
               await waitMilli();
