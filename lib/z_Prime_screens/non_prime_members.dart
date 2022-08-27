@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 import 'package:getwidget/components/list_tile/gf_list_tile.dart';
-import 'package:myshopadmin/Models/user_model.dart';
 import 'package:myshopadmin/custom%20widgets/firestore_listview_builder.dart';
-import 'package:myshopadmin/services/firebase_objects.dart';
+
+import '../Models/prime_member_model.dart';
 
 class NonPrmeMembersPage extends StatelessWidget {
   const NonPrmeMembersPage({Key? key}) : super(key: key);
@@ -30,18 +30,20 @@ class ListPrime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FirestoreListViewBuilder(
-        query: authUserCR.where(userMOs.memberPosition, isNull: true),
+        query: primeMOs
+            .primeMembersCR()
+            .where(primeMOs.memberPosition, isNull: true),
         builder: (p0, qds) {
-          var um = UserModel.fromMap(qds.data());
+          var pmm = PrimeMemberModel.fromMap(qds.data());
           return GFListTile(
             title: Text(
-              um.profileName,
+              pmm.name ?? "",
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            subTitleText: um.userEmail,
+            subTitleText: pmm.email,
             avatar: GFAvatar(
-              backgroundImage: um.profilePhotoUrl != null
-                  ? CachedNetworkImageProvider(um.profilePhotoUrl!)
+              backgroundImage: pmm.profilePhotoUrl != null
+                  ? CachedNetworkImageProvider(pmm.profilePhotoUrl!)
                   : null,
             ),
           );

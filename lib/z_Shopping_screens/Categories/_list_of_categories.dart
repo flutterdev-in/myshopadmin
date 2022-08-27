@@ -54,11 +54,11 @@ class ListOfCategories extends StatelessWidget {
       // padding: const EdgeInsets.all(0),
       color: Colors.brown.shade50,
       avatar: InkWell(
-          child: Obx(() => GFAvatar(
-                backgroundImage: cat.imageUrl != null
-                    ? CachedNetworkImageProvider(cat.imageUrl!)
-                    : null,
-              )),
+          child: GFAvatar(
+            backgroundImage: cat.imageUrl != null
+                ? CachedNetworkImageProvider(cat.imageUrl!)
+                : null,
+          ),
           onTap: () async {
             String? imgUrl = await catMOs.pickUploadCatImage(cat.name);
             if (imgUrl != null) {

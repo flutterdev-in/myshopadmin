@@ -5,9 +5,7 @@ import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:myshopadmin/Models/category_model.dart';
-import 'package:myshopadmin/Screens/Products/aa_edit_prices.dart';
-import 'package:myshopadmin/Screens/Products/ab_edit_photos.dart';
-import 'package:myshopadmin/Screens/Products/ac_edit_descriptions.dart';
+
 import 'package:myshopadmin/custom%20widgets/alert_dialogue.dart';
 import 'package:myshopadmin/custom%20widgets/stream_builder_widget.dart';
 import 'package:myshopadmin/dart/repeatFunctions.dart';
@@ -15,6 +13,10 @@ import 'package:myshopadmin/dart/text_formatters.dart';
 import 'package:myshopadmin/dart/useful_functions.dart';
 import '../../Models/product_model.dart';
 import 'package:collection/collection.dart';
+
+import 'aa_edit_prices.dart';
+import 'ab_edit_photos.dart';
+import 'ac_edit_descriptions.dart';
 
 class EditProductPage extends StatelessWidget {
   final ProductModel pmOld;
@@ -29,10 +31,10 @@ class EditProductPage extends StatelessWidget {
           IconButton(
               onPressed: () async {
                 await waitMilli(500);
-                if (pmOld.images!=null){
+                if (pmOld.images != null) {
                   await pmOld.productSR?.delete();
                 }
-                
+
                 await pmOld.docRef!.delete();
 
                 await waitMilli(800);

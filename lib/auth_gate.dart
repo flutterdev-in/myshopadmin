@@ -9,7 +9,7 @@ import 'package:myshopadmin/custom%20widgets/stream_builder_widget.dart';
 import 'package:myshopadmin/services/fire_admin.dart';
 import 'package:myshopadmin/services/firebase_objects.dart';
 
-import '_home_page.dart';
+import '_home_screen.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({Key? key}) : super(key: key);
@@ -34,7 +34,7 @@ class AuthGate extends StatelessWidget {
                 var gmails = snapshot.data()?[fa.gmails] as List;
                 if (gmails
                     .contains(fireUser().email?.replaceAll("@gmail.com", ""))) {
-                  return const HomePage();
+                  return const HomeScreen();
                 }
                 return UnAuthorizedLogin(true);
               });

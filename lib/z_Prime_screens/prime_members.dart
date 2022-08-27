@@ -2,10 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/avatar/gf_avatar.dart';
 import 'package:getwidget/components/list_tile/gf_list_tile.dart';
-import 'package:myshopadmin/Models/user_model.dart';
+import 'package:myshopadmin/Models/prime_member_model.dart';
 import 'package:myshopadmin/custom%20widgets/firestore_listview_builder.dart';
 import 'package:myshopadmin/custom%20widgets/stream_single_query_builder.dart';
-import 'package:myshopadmin/services/firebase_objects.dart';
 
 import '../matrix/matrix_income.dart';
 import '../matrix/positions.dart';
@@ -34,28 +33,31 @@ class ListPrime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FirestoreListViewBuilder(
-        query: authUserCR
-            .where(userMOs.memberPosition, isNull: false)
-            .orderBy(userMOs.memberPosition, descending: false),
+        query: primeMOs
+            .primeMembersCR()
+            .where(primeMOs.memberPosition, isNull: false)
+            .orderBy(primeMOs.memberPosition, descending: false),
         builder: (p0, qds) {
-          var um = UserModel.fromMap(qds.data());
+          var pmm = PrimeMemberModel.fromMap(qds.data());
           return StreamSingleQueryBuilder(
-              query:
-                  authUserCR.orderBy(userMOs.memberPosition, descending: true),
+              query: primeMOs
+                  .primeMembersCR()
+                  .where(primeMOs.memberPosition, isNull: false)
+                  .orderBy(primeMOs.memberPosition, descending: true),
               docBuilder: (context, snapshot) {
-                var umLast = UserModel.fromMap(snapshot.data());
+                var pmmLast = PrimeMemberModel.fromMap(snapshot.data());
                 return GFListTile(
                   title: Text(
-                    um.profileName,
+                    pmm.name ?? "",
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subTitleText:
-                      "Direct : ${um.directIncome * 500}\nMatrix : ${matrixIncome(um.memberPosition!, umLast.memberPosition!)}",
+                      "Direct : ${pmm.directIncome * 500}\nMatrix : ${matrixIncome(pmm.memberPosition!, pmmLast.memberPosition!)}",
                   icon: Text(
-                      "r${rowNumber(um.memberPosition!) + 1}p${rowPosition(um.memberPosition!)} = ${um.memberPosition}"),
+                      "r${rowNumber(pmm.memberPosition ?? 0) + 1}p${rowPosition(pmm.memberPosition!)} = ${pmm.memberPosition}"),
                   avatar: GFAvatar(
-                    backgroundImage: um.profilePhotoUrl != null
-                        ? CachedNetworkImageProvider(um.profilePhotoUrl!)
+                    backgroundImage: pmm.profilePhotoUrl != null
+                        ? CachedNetworkImageProvider(pmm.profilePhotoUrl!)
                         : null,
                   ),
                 );
