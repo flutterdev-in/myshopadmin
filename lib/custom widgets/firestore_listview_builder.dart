@@ -5,8 +5,7 @@ import 'package:getwidget/getwidget.dart';
 
 class FirestoreListViewBuilder extends StatelessWidget {
   final Query<Map<String, dynamic>> query;
-  final Widget Function(
-      BuildContext, QueryDocumentSnapshot<Map<String, dynamic>>) builder;
+  final Widget Function(QueryDocumentSnapshot<Map<String, dynamic>> snapshot) builder;
   final Widget? loadingW;
   final Widget? noResultsW;
   final Widget? errorW;
@@ -50,7 +49,7 @@ class FirestoreListViewBuilder extends StatelessWidget {
                     snapshot.fetchMore();
                   }
                   var qds = snapshot.docs[index];
-                  return builder(context, qds);
+                  return builder(qds);
                 });
           }
           return loadingW ?? const GFLoader();

@@ -1,4 +1,3 @@
-
 import 'positions.dart';
 
 List<MH> matrixHistory(int thisMemberPos, int lastMemberPos) {
@@ -37,7 +36,7 @@ List<MH> matrixHistory(int thisMemberPos, int lastMemberPos) {
           memPos: upLevelPosition(3, thisMemberPos)));
       listMH.add(MH(amount: 450, isPlus: false, memPos: 0));
     } else {
-      while (dlFirstPos(1, dlfp) <= lastMemberPos) {
+      while (dlFirstPos(1, dlfp + 1) <= lastMemberPos) {
         listMH.add(MH(amount: 500, isPlus: true, memPos: dlfp));
         dlfp++;
       }

@@ -50,8 +50,8 @@ class EditPhotos extends StatelessWidget {
           ),
           SingleChildScrollView(
             child: StreamDocBuilder(
-                docRef: pm.docRef!,
-                docBuilder: (context, snapshot) {
+                stream: pm.docRef!,
+                builder: (context, snapshot) {
                   var pmNew = ProductModel.fromMap(snapshot.data()!);
                   return Wrap(
                       children: pmNew.images?.map((e) {

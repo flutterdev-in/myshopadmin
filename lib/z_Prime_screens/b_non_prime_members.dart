@@ -33,7 +33,7 @@ class ListPrime extends StatelessWidget {
         query: primeMOs
             .primeMembersCR()
             .where(primeMOs.memberPosition, isNull: true),
-        builder: (p0, qds) {
+        builder: ( qds) {
           var pmm = PrimeMemberModel.fromMap(qds.data());
           return GFListTile(
             title: Text(

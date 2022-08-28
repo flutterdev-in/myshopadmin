@@ -45,8 +45,8 @@ class EditProductPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: StreamDocBuilder(
-            docRef: pmOld.docRef!,
-            docBuilder: (context, snapshot) {
+            stream: pmOld.docRef!,
+            builder: (context, snapshot) {
               var pm = ProductModel.fromMap(snapshot.data()!);
               pm.docRef = snapshot.reference;
               return Column(

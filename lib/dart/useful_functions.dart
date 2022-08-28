@@ -1,5 +1,6 @@
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 void afterDebounce({
   int seconds = 1,
@@ -14,4 +15,8 @@ TextEditingController textEditingController(String? text) {
   // tc.selection =
   //     TextSelection.fromPosition(TextPosition(offset: tc.text.length));
   return tc;
+}
+
+String timeString(DateTime time) {
+  return DateFormat("dd MMM, hh:mm a").format(time);
 }

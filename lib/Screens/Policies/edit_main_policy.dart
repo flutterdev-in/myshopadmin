@@ -20,8 +20,8 @@ class EditMainPolicy extends StatelessWidget {
         title: const Text('Edit'),
       ),
       body: StreamDocBuilder(
-          docRef: pmOld.docRef!,
-          docBuilder: (context, snapshot) {
+          stream: pmOld.docRef!,
+          builder: (context, snapshot) {
             var pm = PolicyModel.fromMap(snapshot.data()!);
             pm.docRef = snapshot.reference;
 
@@ -125,8 +125,8 @@ class EditSubPolicy extends StatelessWidget {
               child: const Text("Delete this sub policy")),
           SingleChildScrollView(
             child: StreamDocBuilder(
-                docRef: pmOld.docRef!,
-                docBuilder: (context, snapshot) {
+                stream: pmOld.docRef!,
+                builder: (context, snapshot) {
                   var pm = PolicyModel.fromMap(snapshot.data()!);
                   pm.docRef = snapshot.reference;
 

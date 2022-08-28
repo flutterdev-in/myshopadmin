@@ -32,11 +32,11 @@ class ShoppingHomeScreen extends StatelessWidget {
           },
         ),
         GFListTile(
-          titleText: "Policies",
+          titleText: "Shopping Policies",
           avatar: const Icon(MdiIcons.policeBadge),
           onTap: () async {
             waitMilli();
-            Get.to(() => const ListPolicies());
+            Get.to(() => const ListPolicies(false));
           },
         ),
       ],

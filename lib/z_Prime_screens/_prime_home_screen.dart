@@ -5,8 +5,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import '../Screens/Policies/_list_policies.dart';
 import '../dart/repeatFunctions.dart';
-import 'non_prime_members.dart';
-import 'prime_members.dart';
+import 'kyc pages/_kyc_home_page.dart';
+import 'b_non_prime_members.dart';
+import 'a_prime_members.dart';
 
 class PrimeHomeScreen extends StatelessWidget {
   const PrimeHomeScreen({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class PrimeHomeScreen extends StatelessWidget {
           },
         ),
         GFListTile(
-          titleText: "Non prime Gmail members",
+          titleText: "Non prime Registered members",
           avatar: const Icon(MdiIcons.account),
           onTap: () async {
             await waitMilli();
@@ -32,11 +33,19 @@ class PrimeHomeScreen extends StatelessWidget {
           },
         ),
         GFListTile(
-          titleText: "Policies",
+          titleText: "KYC",
           avatar: const Icon(MdiIcons.policeBadge),
           onTap: () async {
             waitMilli();
-            Get.to(() => const ListPolicies());
+            Get.to(() => const KycHomePage());
+          },
+        ),
+        GFListTile(
+          titleText: "Prime Policies",
+          avatar: const Icon(MdiIcons.policeBadge),
+          onTap: () async {
+            waitMilli();
+            Get.to(() => const ListPolicies(true));
           },
         ),
       ],

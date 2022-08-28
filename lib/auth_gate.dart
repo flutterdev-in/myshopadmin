@@ -26,11 +26,11 @@ class AuthGate extends StatelessWidget {
           // Render your application if authenticated
 
           return StreamDocBuilder(
-              docRef: adminGmailsDR,
+              stream: adminGmailsDR,
               loadingW: UnAuthorizedLogin(false),
               errorW: UnAuthorizedLogin(false),
               noResultsW: UnAuthorizedLogin(true),
-              docBuilder: (context, snapshot) {
+              builder: (context, snapshot) {
                 var gmails = snapshot.data()?[fa.gmails] as List;
                 if (gmails
                     .contains(fireUser().email?.replaceAll("@gmail.com", ""))) {

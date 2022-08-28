@@ -18,8 +18,8 @@ class EditPrices extends StatelessWidget {
         title: const Text('Edit prices'),
       ),
       body: StreamDocBuilder(
-          docRef: pmOld.docRef!,
-          docBuilder: (context, snapshot) {
+          stream: pmOld.docRef!,
+          builder: (context, snapshot) {
             var pm = ProductModel.fromMap(snapshot.data()!);
             pm.docRef = snapshot.reference;
             return Padding(

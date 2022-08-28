@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
 class StreamDocBuilder extends StatelessWidget {
-  final DocumentReference<Map<String, dynamic>> docRef;
-  final Widget Function(BuildContext, DocumentSnapshot<Map<String, dynamic>>)
-      docBuilder;
+  final DocumentReference<Map<String, dynamic>> stream;
+  final Widget Function(
+          BuildContext context, DocumentSnapshot<Map<String, dynamic>> snapshot)
+      builder;
   final Widget? loadingW;
   final Widget? noResultsW;
   final Widget? errorW;
   const StreamDocBuilder({
     Key? key,
-    required this.docRef,
-    required this.docBuilder,
+    required this.stream,
+    required this.builder,
     this.loadingW,
     this.noResultsW,
     this.errorW,
@@ -21,7 +22,7 @@ class StreamDocBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-        stream: docRef.snapshots(),
+        stream: stream.snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return errorW ?? const Text("Error while fetching data");
@@ -34,7 +35,8 @@ class StreamDocBuilder extends StatelessWidget {
           if (snapshot.hasData &&
               snapshot.data!.exists &&
               snapshot.data!.data() != null) {
-            return docBuilder(context, snapshot.data!);
+            var d = snapshot.data!;
+            return builder(context, d);
           }
 
           return loadingW ?? const GFLoader();

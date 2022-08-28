@@ -23,8 +23,8 @@ class ListOfCategories extends StatelessWidget {
         title: const Text("List of categories"),
       ),
       body: StreamDocBuilder(
-        docRef: catMOs.categoriesDocRef(),
-        docBuilder: (p0, docSnap) {
+        stream: catMOs.categoriesDocRef(),
+        builder: (p0, docSnap) {
           return Column(
             children: [
               TextButton(

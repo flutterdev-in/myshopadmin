@@ -9,18 +9,19 @@ import '../../dart/repeatFunctions.dart';
 import 'edit_main_policy.dart';
 
 class ListPolicies extends StatelessWidget {
-  const ListPolicies({Key? key}) : super(key: key);
+  final bool isPrime;
+  const ListPolicies(this.isPrime, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("List Policies"),
+        title: Text("${isPrime ? 'Prime' : 'Shopping'} Policies"),
         actions: [
           IconButton(
               onPressed: () async {
                 waitMilli();
-                await policyMOs.addPolicy();
+                await policyMOs.addPolicy(isPrime);
               },
               icon: const Icon(MdiIcons.plus))
         ],
@@ -29,8 +30,10 @@ class ListPolicies extends StatelessWidget {
         children: [
           Expanded(
             child: FirestoreListViewBuilder(
-              query: policyMOs.policiesCR(),
-              builder: (p0, qds) {
+              query: policyMOs
+                  .policiesCR()
+                  .where(policyMOs.isPrimePolicy, isEqualTo: isPrime),
+              builder: ( qds) {
                 var pm = PolicyModel.fromMap(qds.data());
                 pm.docRef = qds.reference;
                 return GFListTile(

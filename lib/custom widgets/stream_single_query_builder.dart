@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
 class StreamSingleQueryBuilder extends StatelessWidget {
-  final Query<Map<String, dynamic>> query;
-  final Widget Function(
-      BuildContext, QueryDocumentSnapshot<Map<String, dynamic>>) docBuilder;
+  final Query<Map<String, dynamic>> stream;
+  final Widget Function(BuildContext context,
+      QueryDocumentSnapshot<Map<String, dynamic>> snapshot) builder;
   final Widget? loadingW;
   final Widget? noResultsW;
   final Widget? errorW;
   const StreamSingleQueryBuilder({
     Key? key,
-    required this.query,
-    required this.docBuilder,
+    required this.stream,
+    required this.builder,
     this.loadingW,
     this.noResultsW,
     this.errorW,
@@ -21,7 +21,7 @@ class StreamSingleQueryBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: query.limit(1).snapshots(),
+        stream: stream.limit(1).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return errorW ?? const Text("Error while fetching data");
@@ -30,7 +30,7 @@ class StreamSingleQueryBuilder extends StatelessWidget {
             return noResultsW ?? const Text("Data not exits");
           }
           if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-            return docBuilder(context, snapshot.data!.docs.first);
+            return builder(context, snapshot.data!.docs.first);
           }
           return loadingW ?? const GFLoader();
         });

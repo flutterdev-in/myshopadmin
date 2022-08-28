@@ -21,8 +21,8 @@ class EditDescriptions extends StatelessWidget {
         title: const Text('Edit Descriptions'),
       ),
       body: StreamDocBuilder(
-          docRef: pm.docRef!,
-          docBuilder: (context, snapshot) {
+          stream: pm.docRef!,
+          builder: (context, snapshot) {
             var pmNew = ProductModel.fromMap(snapshot.data()!);
             var listDes = pmNew.descriptions ?? [];
             return Column(

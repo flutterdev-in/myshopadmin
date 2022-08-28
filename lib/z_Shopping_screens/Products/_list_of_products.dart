@@ -34,7 +34,7 @@ class ListOfProducts extends StatelessWidget {
             child: FirestoreListViewBuilder(
               query: productMOS.productsCR
                   .orderBy(productMOS.uploadTime, descending: true),
-              builder: (p0, qds) {
+              builder: (qds) {
                 var pm = ProductModel.fromMap(qds.data());
                 pm.docRef = qds.reference;
                 return GFListTile(
