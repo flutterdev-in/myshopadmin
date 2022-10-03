@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:myshopadmin/Models/prime_member_model.dart';
 import 'package:myshopadmin/custom%20widgets/firestore_listview_builder.dart';
 import 'package:myshopadmin/matrix/matrix_history.dart';
 import 'package:myshopadmin/matrix/matrix_income.dart';
+import 'package:myshopadmin/z_Prime_screens/x_member_dashboard.dart';
 
 import '../../matrix/positions.dart';
 
@@ -23,7 +25,7 @@ class _PrimeMemberEachPageState extends State<PrimeMemberEachPage>
   @override
   void initState() {
     super.initState();
-    tabC = TabController(initialIndex: 0, length: 2, vsync: this);
+    tabC = TabController(initialIndex: 0, length: 3, vsync: this);
   }
 
   @override
@@ -42,23 +44,22 @@ class _PrimeMemberEachPageState extends State<PrimeMemberEachPage>
                         "${widget.pmm.name}",
                         textScaleFactor: 0.8,
                       ),
-                      Text(
-                        "r${rowNumber(widget.pmm.memberPosition!) + 1}p${rowPosition(widget.pmm.memberPosition!)}",
-                        textScaleFactor: 0.8,
-                      ),
                     ],
                   ),
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(36.0),
                     child: TabBar(
                       controller: tabC,
+                      isScrollable: true,
                       indicatorColor: Colors.white70,
                       tabs: [
+                        const SizedBox(
+                            height: 30, child: Center(child: Text("Profile"))),
                         SizedBox(
                             height: 30,
                             child: Center(
                                 child: Text(
-                                    "Direct (${widget.pmm.directIncome * 500})"))),
+                                    "Referal (${widget.pmm.directIncome * 500})"))),
                         SizedBox(
                             height: 30,
                             child: Center(
@@ -73,6 +74,7 @@ class _PrimeMemberEachPageState extends State<PrimeMemberEachPage>
                 child: TabBarView(
                   controller: tabC,
                   children: [
+                    MemberDashboard(widget.pmm, true, false),
                     refMembers(pmmLast),
                     matrixList(widget.pmm, pmmLast),
                   ],
@@ -93,6 +95,7 @@ class _PrimeMemberEachPageState extends State<PrimeMemberEachPage>
       query: primeMOs
           .primeMembersCR()
           .where(primeMOs.refMemberId, isEqualTo: widget.pmm.memberID)
+          .where(primeMOs.memberPosition, isNull: false)
           .orderBy(primeMOs.memberPosition, descending: false),
       builder: (snapshot) {
         var pm = PrimeMemberModel.fromMap(snapshot.data());
@@ -103,12 +106,15 @@ class _PrimeMemberEachPageState extends State<PrimeMemberEachPage>
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           icon: Text(
-              "r${rowNumber(pm.memberPosition ?? 0) + 1}p${rowPosition(pm.memberPosition!)} = ${pm.memberPosition}"),
+              "r${rowNumber(pm.memberPosition ?? 0) + 1}p${rowPosition(pm.memberPosition ?? 0)} = ${pm.memberPosition ?? 0}"),
           avatar: GFAvatar(
             backgroundImage: pm.profilePhotoUrl != null
                 ? CachedNetworkImageProvider(pm.profilePhotoUrl!)
                 : null,
           ),
+          onTap: () {
+            Get.to(() => MemberDashboard(pm, true, true));
+          },
         );
       },
     );

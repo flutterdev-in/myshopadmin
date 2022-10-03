@@ -54,12 +54,13 @@ int oneUpLevelPosition(int position) {
     if (rowPos <= 3) {
       upperRowPosition = 1;
     } else {
-      int rowPosReminder = rowPos % 3;
-      if (rowPosReminder == 0) {
-        upperRowPosition = (rowPos / 3).ceil();
-      } else {
-        upperRowPosition = (rowPos / 3).ceil() + 1;
-      }
+      upperRowPosition = (rowPos / 3).ceil();
+      // int rowPosReminder = rowPos % 3;
+      // if (rowPosReminder == 0) {
+      //   upperRowPosition = (rowPos / 3).ceil();
+      // } else {
+      //   upperRowPosition = (rowPos / 3).ceil() + 1;
+      // }
     }
 
     return getPosition(l1Row, upperRowPosition);
@@ -77,8 +78,6 @@ int upLevelPosition(int levelNumber, int originalPosition) {
   return levelPos;
 }
 
-
-
 List<int> get5downLevelEndPositions(int originalPosition) {
   int rowNum = rowNumber(originalPosition);
   int rowPos = rowPosition(originalPosition);
@@ -88,8 +87,6 @@ List<int> get5downLevelEndPositions(int originalPosition) {
 
   return [dl(1), dl(3), dl(6), dl(8), dl(10)];
 }
-
-
 
 class MH {
   int amount;

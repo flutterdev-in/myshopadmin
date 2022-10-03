@@ -27,7 +27,8 @@ class PrmeMembersPage extends StatelessWidget {
               onPressed: () {
                 descending.value = !descending.value;
               },
-              icon: const Icon(MdiIcons.sort)),
+              icon: Obx(() =>
+                  Icon(descending.value ? MdiIcons.details : MdiIcons.delta))),
         ],
       ),
       body: Column(
@@ -68,6 +69,8 @@ class PrmeMembersPage extends StatelessWidget {
                     ? primeMOs
                         .primeMembersCR()
                         .where(primeMOs.memberPosition, isNull: false)
+                        .orderBy(primeMOs.memberPosition,
+                            descending: descending.value)
                     : primeMOs
                         .primeMembersCR()
                         .where(primeMOs.memberPosition,
@@ -79,6 +82,7 @@ class PrmeMembersPage extends StatelessWidget {
                             descending: descending.value),
                 builder: (qds) {
                   var pmm = PrimeMemberModel.fromMap(qds.data());
+                  pmm.docRef = qds.reference;
                   return StreamSingleQueryBuilder(
                       stream: primeMOs
                           .primeMembersCR()
@@ -92,7 +96,7 @@ class PrmeMembersPage extends StatelessWidget {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subTitleText:
-                              "Direct : ${pmm.directIncome * 500}\nMatrix : ${matrixIncome(pmm.memberPosition!, pmmLast.memberPosition!)}",
+                              "(${pmm.userName})\nRefreral : ${pmm.directIncome * 500}\nMatrix : ${matrixIncome(pmm.memberPosition!, pmmLast.memberPosition!)}",
                           icon: Text(
                               "r${rowNumber(pmm.memberPosition ?? 0) + 1}p${rowPosition(pmm.memberPosition!)} = ${pmm.memberPosition}"),
                           avatar: GFAvatar(
